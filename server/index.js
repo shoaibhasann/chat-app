@@ -1,8 +1,14 @@
+import { config } from "dotenv";
 import express from "express";
 import { Server } from "socket.io";
 import { createServer } from "node:http";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+
+// load env variables
+config();
+
+const port = process.env.PORT || 9000;
 
 // constructing _dirname
 const _dirname = dirname(fileURLToPath(import.meta.url));
@@ -10,11 +16,17 @@ const _dirname = dirname(fileURLToPath(import.meta.url));
 // basic express app
 const app = express();
 
+
 // create a http server with express to handle http request-reponse
 const server = createServer(app);
 
-// binding websocket using socket.io into http server
-const io = new Server(server);
+// binding websocket using socket.io into http server and setting cors
+const io = new Server(server, {
+  cors: {
+    origin: [process.env.CLIENT_URL],
+    methods: ["GET", "POST"]
+  }
+});
 
 // path to client directory
 const clientPath = join(_dirname, "..", "client");
@@ -50,13 +62,12 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const username = users[socket.id];
     if (username) {
-      console.log(`${username} left the chat`);
       socket.broadcast.emit("left-chat", username);
       delete users[socket.id];
     }
   });
 });
 
-server.listen(3000, () => {
+server.listen(port, () => {
   console.log("server running at http://localhost:3000");
 });
