@@ -187,9 +187,8 @@ function initializeChat(username) {
 
 // function to play message sound
 function playSound() {
-  const notificationSound = document.getElementById("notificationSound");
-  notificationSound.currentTime = 0;
-  notificationSound.play().catch((error) => {
+  const messageSound = new Audio("./public/facebook_messenger.mp3");
+  messageSound.play().catch((error) => {
     console.error("Error playing sound:", error);
   });
 }
