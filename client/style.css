@@ -69,7 +69,7 @@ h1 {
 .chat-container {
   width: 70vw;
   height: 70vh;
-  background: url(./bg.jpg) no-repeat center center;
+  background: url(./public/bg.jpg) no-repeat center center;
   background-size: cover; /* Ensures image covers the container */
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
